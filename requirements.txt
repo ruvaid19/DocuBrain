@@ -5,6 +5,12 @@ alembic
 qdrant-client
 langchain
 langchain-google-genai
+greenlet
+
+# Testing
+pytest
+pytest-asyncio
+httpx
 pymupdf
 marker-pdf
 pydantic-settings
