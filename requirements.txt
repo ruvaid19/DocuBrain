@@ -1,0 +1,15 @@
+fastapi[standard]
+uvicorn
+sqlalchemy
+alembic
+qdrant-client
+langchain
+langchain-google-genai
+pymupdf
+marker-pdf
+pydantic-settings
+asyncpg
+pytest
+ruff
+black
+python-multipart
