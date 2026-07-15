@@ -65,9 +65,33 @@ async def insert_document_chunks(chunks: List[Dict[str, Any]]):
             )
         )
         
-    # Insert points into Qdrant
+        # Insert points into Qdrant
     await qdrant_client.upsert(
         collection_name=COLLECTION_NAME,
         points=points
     )
     print(f"Successfully inserted {len(points)} vectors into Qdrant.")
+
+async def search_documents(query_text: str, limit: int = 4) -> List[Dict[str, Any]]:
+    """Searches Qdrant for chunks closest to the query."""
+    # Generate embedding for the search query
+    query_vector = await embeddings.aembed_query(query_text)
+    
+    # Search Qdrant
+    search_result = await qdrant_client.search(
+        collection_name=COLLECTION_NAME,
+        query_vector=query_vector,
+        limit=limit
+    )
+    
+    # Extract payloads
+    results = []
+    for scored_point in search_result:
+        results.append({
+            "score": scored_point.score,
+            "document_id": scored_point.payload.get("document_id"),
+            "page_number": scored_point.payload.get("page_number"),
+            "text": scored_point.payload.get("text")
+        })
+        
+    return results
