@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
@@ -9,10 +10,10 @@ class Settings(BaseSettings):
     DATABASE_URL: str
     
     # Qdrant
-    QDRANT_HOST: str | None = None
-    QDRANT_PORT: int | None = None
-    QDRANT_URL: str | None = None
-    QDRANT_API_KEY: str | None = None
+    QDRANT_HOST: Optional[str] = None
+    QDRANT_PORT: Optional[int] = None
+    QDRANT_URL: Optional[str] = None
+    QDRANT_API_KEY: Optional[str] = None
     
     # Gemini (Google)
     GEMINI_API_KEY: str
