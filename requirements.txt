@@ -19,3 +19,6 @@ pytest
 ruff
 black
 python-multipart
+aiosqlite
+langchain-huggingface
+sentence-transformers

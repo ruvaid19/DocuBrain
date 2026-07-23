@@ -1,8 +1,7 @@
 import enum
 import uuid
 from datetime import datetime, timezone
-from sqlalchemy import Column, String, DateTime, Enum, Text
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, String, DateTime, Enum, Text, Uuid
 from sqlalchemy.orm import DeclarativeBase
 
 class Base(DeclarativeBase):
@@ -17,7 +16,7 @@ class DocumentStatus(str, enum.Enum):
 class Document(Base):
     __tablename__ = "documents"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
     filename = Column(String(255), nullable=False)
     file_path = Column(String(1024), nullable=False)
     upload_time = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))

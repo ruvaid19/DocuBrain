@@ -5,7 +5,7 @@ from app.services.vector_store import search_documents
 from app.schemas.chat import QueryResponse, SourceCitation
 
 llm = ChatGoogleGenerativeAI(
-    model="gemini-1.5-flash",
+    model="gemini-1.5-pro",
     google_api_key=settings.GEMINI_API_KEY,
     temperature=0.2
 )

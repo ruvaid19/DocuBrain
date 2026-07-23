@@ -2,11 +2,11 @@ import uuid
 from typing import List, Dict, Any
 from qdrant_client import AsyncQdrantClient
 from qdrant_client.http import models as rest
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from app.core.config import settings
 
 COLLECTION_NAME = "docubrain_vectors"
-VECTOR_SIZE = 768  # Standard size for text-embedding-004
+VECTOR_SIZE = 768  # Standard size for all-mpnet-base-v2
 
 # Initialize Qdrant Client
 qdrant_client = AsyncQdrantClient(
@@ -14,10 +14,9 @@ qdrant_client = AsyncQdrantClient(
     api_key=settings.QDRANT_API_KEY,
 )
 
-# Initialize Gemini Embeddings
-embeddings = GoogleGenerativeAIEmbeddings(
-    model="models/text-embedding-004",
-    google_api_key=settings.GEMINI_API_KEY
+# Initialize HuggingFace Embeddings
+embeddings = HuggingFaceEmbeddings(
+    model_name="sentence-transformers/all-mpnet-base-v2"
 )
 
 async def ensure_collection_exists():
@@ -78,15 +77,15 @@ async def search_documents(query_text: str, limit: int = 4) -> List[Dict[str, An
     query_vector = await embeddings.aembed_query(query_text)
     
     # Search Qdrant
-    search_result = await qdrant_client.search(
+    search_result = await qdrant_client.query_points(
         collection_name=COLLECTION_NAME,
-        query_vector=query_vector,
+        query=query_vector,
         limit=limit
     )
     
     # Extract payloads
     results = []
-    for scored_point in search_result:
+    for scored_point in search_result.points:
         results.append({
             "score": scored_point.score,
             "document_id": scored_point.payload.get("document_id"),
