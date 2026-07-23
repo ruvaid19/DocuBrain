@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.api.v1 import upload, chat
@@ -46,6 +46,10 @@ async def global_exception_handler(request: Request, exc: Exception):
         status_code=500,
         content={"error": "InternalServerError", "detail": "An unexpected error occurred."},
     )
+
+@app.get("/")
+async def root():
+    return RedirectResponse(url="/docs")
 
 @app.get("/health")
 async def health_check():
